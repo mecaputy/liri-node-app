@@ -10,8 +10,6 @@ var keys = require("./keys.js");
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
-// console.log(Spotify);
-
 var caseStatement = process.argv[2];
 var searchTerm = process.argv[3];
 //===================================================
@@ -32,24 +30,17 @@ var getTweets = function (tweets) {
 
 
 //===================================================
-
+    //
 //===================================================
 //node liri.js spotify-this-song '<song name here>'
 var getSong = function (searchTerm) {
     //create a function to retrieve song and display: artist, song name, preview link, album
-    spotify.search({ type: 'track', query: searchTerm }, function (error, response) {
-        if (!error) {
-            for (var i = 0; i < response.length; i++)
-                console.log(response[i].text);
-        } else if (error) {
-            console.log("There was an error. Try again.");
-        }
-            //     var body = (JSON.parse(body));
-            //     console.log("Artist: " + body.Title);
-            //     console.log("Title: " + body.Year);
-            //     console.log("Preview: " + body.imdbRating);
-            //     console.log("Album: " + body.Ratings[1].Value);//get correct items for spotify
-            // } else{
+    spotify.search({ type: 'track', query: searchTerm }, function (error, data) {
+        console.log("Artist: " + data.tracks.items[0].artists[0].name);
+        console.log("Title: " + data.tracks.items[0].name);
+        console.log("Preview link: " + data.tracks.items[0].preview_url);
+        console.log("Album: " + data.tracks.items[0].album.name);
+
             //make a default to display the song "The Sign" by Ace of Base
         
     })
@@ -78,9 +69,6 @@ var getMovie = function (movieName) {
             console.log("Plot: " + body.Plot);
             console.log("Actors: " + body.Actors);
 
-        } else if (error) {
-            // var defaultMovie = (); Mr
-            //make a default to display the movie "Mr. Nobody"
         }
 
     });
@@ -101,7 +89,12 @@ var getMovie = function (movieName) {
 //===================================================
 var pullData = function (caseStatement, searchTerm) {
     if (caseStatement === "movie-this") {
-        getMovie(searchTerm)
+        if (searchTerm){
+            getMovie(searchTerm)
+        } else {
+            getMovie("Mr. Nobody")
+        }
+        
     } else if (caseStatement === "spotify-this-song") {
         getSong(searchTerm)
     } else if (caseStatement === "my-tweets") {
@@ -113,4 +106,3 @@ var pullData = function (caseStatement, searchTerm) {
 pullData(process.argv[2], process.argv[3]);
 //===================================================
 
-// spotifyUrl = "https://api.spotify.com/?t=" + songName + spotify;
