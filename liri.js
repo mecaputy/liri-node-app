@@ -12,6 +12,7 @@ var client = new Twitter(keys.twitter);
 
 var caseStatement = process.argv[2];
 var searchTerm = process.argv[3];
+
 //===================================================
 //node liri.js my-tweets
 //create a function to retrieve and display tweets
@@ -26,11 +27,9 @@ var getTweets = function (tweets) {
         }
     });
 }
-
-
-
 //===================================================
-    //
+    
+
 //===================================================
 //node liri.js spotify-this-song '<song name here>'
 var getSong = function (searchTerm) {
@@ -39,16 +38,11 @@ var getSong = function (searchTerm) {
         console.log("Artist: " + data.tracks.items[0].artists[0].name);
         console.log("Title: " + data.tracks.items[0].name);
         console.log("Preview link: " + data.tracks.items[0].preview_url);
-        console.log("Album: " + data.tracks.items[0].album.name);
-
-            //make a default to display the song "The Sign" by Ace of Base
-        
+        console.log("Album: " + data.tracks.items[0].album.name);    
     })
-
 };
-
-
 //===================================================
+
 
 //===================================================
 //node liri.js movie-this '<movie name here>'
@@ -68,23 +62,24 @@ var getMovie = function (movieName) {
             console.log("Language: " + body.Language);
             console.log("Plot: " + body.Plot);
             console.log("Actors: " + body.Actors);
-
         }
-
     });
 }
 //===================================================
 
+
 //===================================================
 //node liri.js do-what-it-says 
 //us the fs package
-//run spotify-this0song for "i want it that way" in random.txt
-// var getRandom = function() {
-//     if (caseStatement === 'do-what-it-says'){
-//         getSong('./random.text')
-//     }
-// }
+//run spotify-this-song for "i want it that way" in random.txt
+function getRandom() {
+fs.readFile("random.txt", "utf8", function(error, data){
+    var dataTxt = data.split(",");
+    getSong(dataTxt[1]);
+});
+}
 //===================================================
+
 
 //===================================================
 var pullData = function (caseStatement, searchTerm) {
@@ -96,11 +91,15 @@ var pullData = function (caseStatement, searchTerm) {
         }
         
     } else if (caseStatement === "spotify-this-song") {
-        getSong(searchTerm)
+        if (searchTerm){
+            getSong(searchTerm)
+        } else {
+            getSong("Ace of Base")
+        }
     } else if (caseStatement === "my-tweets") {
         getTweets()
     } else if (caseStatement === "do-what-it-says") {
-        getSong()
+        getRandom()
     }
 };
 pullData(process.argv[2], process.argv[3]);
