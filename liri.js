@@ -62,6 +62,8 @@ var getMovie = function (movieName) {
             console.log("Language: " + body.Language);
             console.log("Plot: " + body.Plot);
             console.log("Actors: " + body.Actors);
+        } else if (error) {
+            console.log("Movie not found. Try again.")
         }
     });
 }
